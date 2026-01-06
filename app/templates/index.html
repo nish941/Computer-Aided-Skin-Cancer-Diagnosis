@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Diagnosis - AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-stethoscope"></i>
+                <span>SkinCancer<span class="ai">AI</span></span>
+            </div>
+            <nav class="nav">
+                <a href="/" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#"><i class="fas fa-book-medical"></i> Guidelines</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container main-container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1><i class="fas fa-brain"></i> AI-Powered Skin Cancer Diagnosis</h1>
+                <p class="subtitle">Upload a skin lesion image for instant analysis using our ResNet-50 model with 84.3% accuracy</p>
+                <div class="stats">
+                    <div class="stat">
+                        <i class="fas fa-check-circle"></i>
+                        <span>7 Classes Detected</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>91% Sensitivity</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-eye"></i>
+                        <span>Grad-CAM Visualization</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload & Results Section -->
+        <div class="content-wrapper">
+            <!-- Left Panel: Upload -->
+            <div class="left-panel">
+                <div class="upload-card">
+                    <div class="upload-header">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Skin Image</h2>
+                    </div>
+                    
+                    <div class="upload-area" id="dropArea">
+                        <i class="fas fa-file-image upload-icon"></i>
+                        <p class="upload-text">Drag & drop your image here</p>
+                        <p class="upload-subtext">or click to browse</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                        <p class="file-types">Supported: JPG, PNG, BMP, TIFF (max 16MB)</p>
+                    </div>
+                    
+                    <div class="upload-guidelines">
+                        <h3><i class="fas fa-lightbulb"></i> Guidelines for Best Results:</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Use clear, well-lit images</li>
+                            <li><i class="fas fa-check"></i> Center the lesion in the frame</li>
+                            <li><i class="fas fa-check"></i> Include some surrounding skin for context</li>
+                            <li><i class="fas fa-check"></i> Avoid blurry or shadowed images</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="disclaimer">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p><strong>Disclaimer:</strong> This tool is for educational purposes only. Always consult a medical professional for diagnosis.</p>
+                    </div>
+                </div>
+                
+                <!-- Recent Predictions (Hidden initially) -->
+                <div class="recent-predictions" id="recentPredictions" style="display: none;">
+                    <h3><i class="fas fa-history"></i> Recent Analysis</h3>
+                    <div id="recentList"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="right-panel">
+                <!-- Initial State -->
+                <div class="results-card" id="initialState">
+                    <div class="placeholder">
+                        <i class="fas fa-microscope placeholder-icon"></i>
+                        <h2>Awaiting Analysis</h2>
+                        <p>Upload a skin lesion image to begin AI-powered diagnosis</p>
+                        <div class="placeholder-stats">
+                            <div class="placeholder-stat">
+                                <div class="stat-circle">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <span>ResNet-50 Model</span>
+                            </div>
+                            <div class="placeholder-stat">
+                                <div class="stat-circle">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <span>ISIC 2018 Trained</span>
+                            </div>
+                            <div class="placeholder-stat">
+                                <div class="stat-circle">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <span>Real-time Results</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="results-card" id="loadingState" style="display: none;">
+                    <div class="loading">
+                        <div class="spinner">
+                            <div class="spinner-circle"></div>
+                            <div class="spinner-circle"></div>
+                            <div class="spinner-circle"></div>
+                        </div>
+                        <h2>Analyzing Image...</h2>
+                        <p>Our AI is examining the lesion patterns</p>
+                        <div class="loading-steps">
+                            <div class="step active">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Image Uploaded</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Preprocessing</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-brain"></i>
+                                <span>AI Analysis</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Generating Report</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results State -->
+                <div class="results-card" id="resultsState" style="display: none;">
+                    <!-- Top Bar -->
+                    <div class="results-header">
+                        <div class="results-title">
+                            <h2><i class="fas fa-diagnoses"></i> Diagnosis Results</h2>
+                            <p class="timestamp" id="timestamp"></p>
+                        </div>
+                        <button class="print-btn" onclick="printResults()">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                    </div>
+
+                    <!-- Prediction -->
+                    <div class="prediction-section">
+                        <div class="prediction-card" id="predictionCard">
+                            <div class="prediction-header">
+                                <h3><i class="fas fa-crosshairs"></i> Primary Prediction</h3>
+                                <div class="confidence-badge" id="confidenceBadge">
+                                    <i class="fas fa-bullseye"></i>
+                                    <span id="confidenceText">--%</span>
+                                </div>
+                            </div>
+                            <div class="prediction-content">
+                                <div class="prediction-main">
+                                    <h1 id="predictionText">--</h1>
+                                    <p class="prediction-abbr" id="predictionAbbr">--</p>
+                                </div>
+                                <div class="severity-indicator" id="severityIndicator">
+                                    <div class="severity-dot"></div>
+                                    <span id="severityText">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="image-section">
+                        <div class="image-card">
+                            <h3><i class="fas fa-image"></i> Original Image</h3>
+                            <div class="image-container">
+                                <img id="originalImage" src="" alt="Original">
+                            </div>
+                        </div>
+                        <div class="image-card">
+                            <h3><i class="fas fa-fire"></i> AI Attention Map</h3>
+                            <div class="image-container">
+                                <img id="heatmapImage" src="" alt="Heatmap">
+                            </div>
+                            <p class="image-caption">Red areas show where AI focused for diagnosis</p>
+                        </div>
+                    </div>
+
+                    <!-- Probabilities Chart -->
+                    <div class="chart-section">
+                        <h3><i class="fas fa-chart-bar"></i> Confidence Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="probabilitiesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-info-circle"></i> Medical Information</h3>
+                        <div class="info-grid" id="medicalInfo">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="recommendations-section">
+                        <h3><i class="fas fa-clipboard-check"></i> Recommendations</h3>
+                        <div class="recommendations" id="recommendations">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn primary" onclick="scheduleAppointment()">
+                                <i class="fas fa-calendar-check"></i> Schedule Dermatologist
+                            </button>
+                            <button class="action-btn secondary" onclick="saveReport()">
+                                <i class="fas fa-download"></i> Save Report
+                            </button>
+                            <button class="action-btn tertiary" onclick="resetAnalysis()">
+                                <i class="fas fa-redo"></i> New Analysis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Academic Project</h4>
+                    <p>Deep Learning Coursework<br>Jan-May 2025</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-code"></i> Technology</h4>
+                    <p>TensorFlow · Flask · ResNet-50<br>Grad-CAM Visualization</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-shield-alt"></i> Disclaimer</h4>
+                    <p>For educational purposes only.<br>Not a substitute for medical advice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Skin Cancer Diagnosis AI | Accuracy: 84.3% | Sensitivity: 91%</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
