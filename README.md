@@ -4,11 +4,11 @@ Computer-Aided Skin Cancer Diagnosis (ResNet + Web App)
  
 ## 📌 About the Project
 
-This project began as a part of our **Deep Learning elective coursework** in my 4th semester (Jan–May 2025). I’ve always been fascinated by the intersection of AI and healthcare, so I took up **automated skin cancer classification** — a topic I quickly realized was much more complex than it looked on the surface.
+This project began as a part of our **Deep Learning elective coursework** in my 4th semester (Jan–May 2025). I’ve always been fascinated by the intersection of AI and healthcare, so I took up **automated skin cancer classification** a topic I quickly realized was much more complex than it looked on the surface.
 
-I initially started with standard **CNN models**, but the results were unstable, especially for rare classes like vascular lesions. After a lot of experimentation, I shifted to **ResNet-50** — a deeper model with residual blocks that made training much more stable and gave significantly better results, especially under image noise or poor contrast.
+I initially started with standard **CNN models**, but the results were unstable, especially for rare classes like vascular lesions. After a lot of experimentation, I shifted to **ResNet-50** a deeper model with residual blocks that made training much more stable and gave significantly better results, especially under image noise or poor contrast.
 
-This was more than just a model training exercise — from data cleaning, preprocessing, class imbalance correction, to late-night debugging and waiting for all 50 epochs to finally run — it was a real deep dive into applied deep learning.
+This was more than just a model training exercise from data cleaning, preprocessing, class imbalance correction, to late-night debugging and waiting for all 50 epochs to finally run — it was a real deep dive into applied deep learning.
 
 To complete the pipeline, I wrapped the model in a **Flask web app**, designed a simple frontend, and deployed it — so anyone could upload an image and get predictions along with Grad-CAM heatmaps to interpret the results.
 
