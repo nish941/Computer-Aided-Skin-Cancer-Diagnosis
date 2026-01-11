@@ -1,6 +1,4 @@
-Computer-Aided Skin Cancer Diagnosis (ResNet + Web App)
-
-*A college deep learning project that started as coursework but became an intense experiment in real-world medical AI.*
+Computer-Aided Skin Cancer Diagnosis (ResNet + Web App) 
 
 ---
 
