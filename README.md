@@ -1,7 +1,7 @@
 Computer-Aided Skin Cancer Diagnosis (ResNet + Web App) 
 
 ---
-
+ 
 ## 📌 About the Project
 
 This project began as a part of our **Deep Learning elective coursework** in my 4th semester (Jan–May 2025). I’ve always been fascinated by the intersection of AI and healthcare, so I took up **automated skin cancer classification** — a topic I quickly realized was much more complex than it looked on the surface.
