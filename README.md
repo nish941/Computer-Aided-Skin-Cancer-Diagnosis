@@ -125,15 +125,6 @@ To complete the pipeline, I wrapped the model in a **Flask web app**, designed a
 
 ---
 
-## 🌐 Try It Live
-
-> 💡 Try the live frontend:
-> [🔗 Skin Cancer Diagnosis Web UI](https://yourusername.github.io/skin-cancer-diagnosis)
-
-*(Frontend only — model hosted locally for now. Full deployment coming soon!)*
-
----
-
 ## 🚀 How to Run Locally
 
 ```bash
